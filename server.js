@@ -6,6 +6,7 @@ const app = express();
 const {
   handleAllFlights,
   handleFlight,
+  lookupUserBySeat,
   handleAllUsers,
   handleUser,
   createNewUser,
@@ -19,6 +20,7 @@ app
 .use(bodyParser.json())
 .get('/slingair/flights', handleAllFlights)
 .get('/slingair/flights/:flightNumber', handleFlight)
+.get('/slingair/flights/:flightNumber/:seat', lookupUserBySeat)
 .get('/slingair/users', handleAllUsers)
 .get('/slingair/users/:identifier', handleUser)
 .post('/slingair/users', createNewUser)

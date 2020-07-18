@@ -16,6 +16,10 @@ function findUser(identifier) {
   return users.find(user => user[lookUp] == identifier);
 }
 
+function lookupFlightSeat(flightNumber, seat) {
+  return users.find(user => user.flight === flightNumber && user.seat === seat);
+}
+
 function isValidData(...data) {
   return data.every(info => info !== undefined);
 }
@@ -36,6 +40,16 @@ function handleFlight(req, res) {
   if (flight) {
     res.status(200).json({ status: 200, flight });
   } else res.status(401).json({ status: 401, message: "Flight not found!" });
+}
+
+function lookupUserBySeat(req, res) {
+  const { flightNumber, seat } = req.params;
+
+  const user = lookupFlightSeat(flightNumber, seat);
+
+  if (user) {
+    res.status(200).json({ status: 200, user });
+  } else res.status(401).json({ status: 401, message: "User not found!" });
 }
 
 function handleAllUsers(req, res) {
@@ -106,6 +120,7 @@ function handleFourOhFour(req, res) {
 module.exports = {
   handleAllFlights,
   handleFlight,
+  lookupUserBySeat,
   handleAllUsers,
   handleUser,
   createNewUser,
