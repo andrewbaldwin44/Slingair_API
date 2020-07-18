@@ -1,6 +1,10 @@
 const { flights } = require('./data/flights');
+const { newFlight } = require('./data/newFlight');
 const { users } = require('./data/users');
 const { v4: uuidv4 } = require('uuid');
+
+const validFlightID = /^[A-Z]{2}\d{3}$/;
+const missingData = "Your request is missing some data or the request is invalid"
 
 function findFlight(flightNumber) {
   return flights[flightNumber];
@@ -13,7 +17,11 @@ function findUser(identifier) {
 }
 
 function isValidData(...data) {
-  data.every(field => field);
+  return data.every(info => info !== undefined);
+}
+
+function isValidFlightID(id) {
+  return validFlightID.test(id) && flights[id] === undefined;
 }
 
 function handleAllFlights(req, res) {
@@ -53,9 +61,9 @@ function handleUser(req, res) {
 }
 
 function createNewUser(req, res) {
-  try {
-    const { email, flight, firstName, lastName, seat } = req.body;
+  const { email, flight, firstName, lastName, seat } = req.body;
 
+  if (isValidData(email, flight, firstName, lastName, seat)) {
     const newUser = {
       id: uuidv4(),
       email: email,
@@ -69,13 +77,26 @@ function createNewUser(req, res) {
 
     res.status(201).json({ status: 201, data: newUser });
   }
-  catch {
-    res.status(401).json({ status: 401, message: "Your request is missing some data or the request is invalid" });
+  else {
+    res.status(401).json({ status: 401, message: missingData });
   }
 }
 
 function createNewFlight(req, res) {
+  const { flightID } = req.body;
 
+  if (flightID === undefined) {
+    res.status(401).json({ status: 401, message: missingData });
+  }
+
+  if (isValidFlightID(flightID)) {
+    flights[flightID] = newFlight;
+
+    res.status(201).json({ status: 201, flightID: newFlight });
+  }
+  else {
+    res.status(401).json({ status: 401, message: "Flight ID is invalid!" });
+  }
 }
 
 function handleFourOhFour(req, res) {

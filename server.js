@@ -1,5 +1,7 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
+
 
 const {
   handleAllFlights,
@@ -14,6 +16,7 @@ const {
 const PORT = process.env.PORT || 8000;
 
 app
+.use(bodyParser.json())
 .get('/slingair/flights', handleAllFlights)
 .get('/slingair/flights/:flightNumber', handleFlight)
 .get('/slingair/users', handleAllUsers)
