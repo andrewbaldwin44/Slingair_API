@@ -35,6 +35,7 @@ submitted will be deleted.
 | `GET`  | `/slingair/users/:userId`         | returns the user object based on the userId (you can also pass an email instead of
                                                a userId) |
 | `POST` | `/slingair/users`                 | creates a new user/reservation                                                                                                                             |
+| `POST` | `/slingair/flights`               | creates a new flight
 
 ### API Response
 
