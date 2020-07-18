@@ -24,6 +24,24 @@ function isValidData(...data) {
   return data.every(info => info !== undefined);
 }
 
+function findSeat(flight, seat) {
+  return flights[flight].find(seatInfo => seatInfo.id === seat)
+}
+
+function isAvailableSeat(flight, seat) {
+  const seatInfo = findSeat(flight, seat);
+
+  return seatInfo !== undefined ? seatInfo.isAvailable : false ;
+}
+
+function isNewUser(email) {
+  return !users.some(user => user.email === email);
+}
+
+function occupySeat(flight, seat) {
+  findSeat(flight, seat).isAvailable = false;
+}
+
 function isValidFlightID(id) {
   return validFlightID.test(id) && flights[id] === undefined;
 }
@@ -77,7 +95,9 @@ function handleUser(req, res) {
 function createNewUser(req, res) {
   const { email, flight, firstName, lastName, seat } = req.body;
 
-  if (isValidData(email, flight, firstName, lastName, seat)) {
+  if (isValidData(email, flight, firstName, lastName, seat) && isAvailableSeat(flight, seat) && isNewUser(email)) {
+    occupySeat(flight, seat);
+
     const newUser = {
       id: uuidv4(),
       email: email,
