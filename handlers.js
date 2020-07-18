@@ -1,9 +1,14 @@
 const { flights } = require('./data/flights');
 const { users } = require('./data/users');
-const request = require('request-promise');
 
 function findFlight(flightNumber) {
   return flights[flightNumber];
+}
+
+function findUser(identifier) {
+  lookUp = identifier.includes('@') ? 'email' : 'id';
+
+  return users.find(user => user[lookUp] == identifier);
 }
 
 function handleAllFlights(req, res) {
@@ -33,7 +38,13 @@ function handleAllUsers(req, res) {
 }
 
 function handleUser(req, res) {
+  const { identifier } = req.params;
 
+  const user = findUser(identifier);
+
+  if (user) {
+    res.status(200).json({ status: 200, user });
+  } else res.status(401).json({ status: 401, message: "User not found!" });
 }
 
 function createNewUser(req, res) {

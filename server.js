@@ -17,7 +17,7 @@ app
 .get('/slingair/flights', handleAllFlights)
 .get('/slingair/flights/:flightNumber', handleFlight)
 .get('/slingair/users', handleAllUsers)
-.get('/slingair/users/:user', handleUser)
+.get('/slingair/users/:identifier', handleUser)
 .post('/slingair/users', createNewUser)
 .post('/slingair/flights', createNewFlight)
 .get('*', handleFourOhFour)
