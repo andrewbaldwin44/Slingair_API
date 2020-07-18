@@ -46,6 +46,10 @@ function isValidFlightID(id) {
   return validFlightID.test(id) && flights[id] === undefined;
 }
 
+function getQueryValue(queryValue, defaultValue) {
+  return queryValue !== undefined ? Number(queryValue) : defaultValue;
+}
+
 function handleAllFlights(req, res) {
   res.status(200).json({ status: 200, flights: Object.keys(flights) });
 }
@@ -71,8 +75,8 @@ function lookupUserBySeat(req, res) {
 }
 
 function handleAllUsers(req, res) {
-  const page = req.query.page !== undefined ? Number(req.query.page) : 1;
-  const limit = req.query.limit !== undefined ? Number(req.query.limit) : 10;
+  const page = getQueryValue(req.query.page, 1);
+  const limit = getQueryValue(req.query.limit, 10);
 
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
