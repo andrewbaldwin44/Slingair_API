@@ -1,5 +1,6 @@
 const { flights } = require('./data/flights');
 const { users } = require('./data/users');
+const { v4: uuidv4 } = require('uuid');
 
 function findFlight(flightNumber) {
   return flights[flightNumber];
@@ -9,6 +10,10 @@ function findUser(identifier) {
   lookUp = identifier.includes('@') ? 'email' : 'id';
 
   return users.find(user => user[lookUp] == identifier);
+}
+
+function isValidData(...data) {
+  data.every(field => field);
 }
 
 function handleAllFlights(req, res) {
@@ -48,7 +53,25 @@ function handleUser(req, res) {
 }
 
 function createNewUser(req, res) {
+  try {
+    const { email, flight, firstName, lastName, seat } = req.body;
 
+    const newUser = {
+      id: uuidv4(),
+      email: email,
+      flight: flight,
+      firstName: firstName,
+      lastName: lastName,
+      seat: seat
+    }
+
+    users.push(newUser);
+
+    res.status(201).json({ status: 201, data: newUser });
+  }
+  catch {
+    res.status(401).json({ status: 401, message: "Your request is missing some data or the request is invalid" });
+  }
 }
 
 function createNewFlight(req, res) {
