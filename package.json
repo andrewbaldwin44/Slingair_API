@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "An API with flight data and user data for Slingair",
   "main": "server.js",
+  "author": "Andrew Baldwin",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon -e js,ejs server.js"
